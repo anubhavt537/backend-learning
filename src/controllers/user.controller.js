@@ -26,7 +26,7 @@ if ([fullName,email,password,username].some((field)=>
 
 // user already exited with username or email
 
-const userExisted=User.findOne({
+const userExisted= await User.findOne({
     $or:[{email},{username}]
 })
 if (userExisted) {
@@ -36,7 +36,11 @@ if (userExisted) {
 
 // checking  avatar 
 const avatarLocalPath=req.files?.avatar[0]?.path
-const coverImgLocalPath=req.files?.coverImage[0]?.path
+// const coverImgLocalPath=req.files?.coverImage[0]?.path
+let coverImgLocalPath
+if(req.files && Array.isArray(req.files.coverimg)&& req.files.coverimg.lenght>0 ){
+    coverImgLocalPath=req.files.coverimg[0].path
+}
 
 if(!avatarLocalPath){
     throw new ApiError(400,"please select avatar image")
